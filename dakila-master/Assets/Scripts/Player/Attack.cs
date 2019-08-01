@@ -32,7 +32,7 @@ public class Attack : BehaviourAbstract
     private float
         _attackPower = 1f,
         _attackRadius = 2f,
-        _attackShowTime = .1f,
+        _attackAnimationLength = .1f,
         _attackInterval = .4f,
         _recoilTimeX = .1f,
         _recoilTimeY = .25f,
@@ -46,12 +46,13 @@ public class Attack : BehaviourAbstract
         _timer = 0f,
         _recoilVelocityY = 0f;
 
-    protected override void Start()
-    {
-        var gravity = -(2f * _recoilDistanceY) / Mathf.Pow(_recoilTimeY, 2f);
+    //protected override void Start()
+    //{
+    //    var gravity = -(2f * _recoilDistanceY) / Mathf.Pow(_recoilTimeY, 2f);
         
-        _recoilVelocityY = Mathf.Abs(gravity) * _recoilTimeY;
-    }
+    //    _recoilVelocityY = Mathf.Abs(gravity) * _recoilTimeY;
+    //}
+
     protected override void Update()
     {
         // grounded
@@ -121,9 +122,10 @@ public class Attack : BehaviourAbstract
 
                 if (hitsForward != null && hitsForward.Length > 0)
                 {
-                    RecoilX();
+                    _playerState.RecoilingX = true; // set to false by RecoilX Script
+                    //RecoilX();
 
-                    foreach(var hit in hitsForward)
+                    foreach (var hit in hitsForward)
                     {
                         // damage enemies
                     }
@@ -158,8 +160,9 @@ public class Attack : BehaviourAbstract
                 if (hitsDown != null && hitsDown.Length > 0)
                 {
                     // recoil only when spike hit
-                    if(hitsDown.Where(h => h.tag == "Spike").Count() > 0)
-                        RecoilY();
+                    if (hitsDown.Where(h => h.tag == "Spike").Count() > 0)
+                        _playerState.RecoilingY = true; // set to false by RecoilY Script
+                        //RecoilY();
 
                     EventManager.Instance.TriggerEvent(ActionNames.SPIKE_HIT.ToString());
 
@@ -172,20 +175,18 @@ public class Attack : BehaviourAbstract
                     Debug.Log("no hit");
 
                 break;
-        }
-
-        
+        }        
     }
 
-    private void RecoilX()
-    {
-        StartCoroutine(RecoilXCo());
-    }
+    //private void RecoilX()
+    //{
+    //    StartCoroutine(RecoilXCo());
+    //}
 
-    private void RecoilY()
-    {
-        StartCoroutine(RecoilYCo());
-    }
+    //private void RecoilY()
+    //{
+    //    StartCoroutine(RecoilYCo());
+    //}
 
     private void OnDrawGizmos()
     {
@@ -218,7 +219,7 @@ public class Attack : BehaviourAbstract
 
         var timer = 0f;
 
-        while (timer < _attackShowTime)
+        while (timer < _attackAnimationLength)
         {
             timer += Time.deltaTime;
 
@@ -242,40 +243,40 @@ public class Attack : BehaviourAbstract
         }
     }
 
-    private IEnumerator RecoilXCo()
-    {
-        var timer = 0f;
-        var velocityX = _recoilDistanceX / _recoilTimeX;
+    //private IEnumerator RecoilXCo()
+    //{
+    //    var timer = 0f;
+    //    var velocityX = _recoilDistanceX / _recoilTimeX;
 
-        _playerState.RecoilingX = true;
-        _rb2d.velocity = new Vector2(0f, _rb2d.velocity.y);
-        _rb2d.velocity = new Vector2(_playerState.FacingRight ? -velocityX : velocityX, _rb2d.velocity.y);
+    //    _playerState.RecoilingX = true;
+    //    _rb2d.velocity = new Vector2(0f, _rb2d.velocity.y);
+    //    _rb2d.velocity = new Vector2(_playerState.FacingRight ? -velocityX : velocityX, _rb2d.velocity.y);
 
-        while (timer < _recoilTimeX)
-        {
-            timer += Time.deltaTime;
+    //    while (timer < _recoilTimeX)
+    //    {
+    //        timer += Time.deltaTime;
 
-            yield return null;
-        }
+    //        yield return null;
+    //    }
 
-        _playerState.RecoilingX = false;
-    }
+    //    _playerState.RecoilingX = false;
+    //}
 
-    private IEnumerator RecoilYCo()
-    {
-        var timer = 0f;
+    //private IEnumerator RecoilYCo()
+    //{
+    //    var timer = 0f;
 
-        _playerState.RecoilingY = true;
-        _rb2d.velocity = new Vector2(_rb2d.velocity.x, 0f);
-        _rb2d.velocity = new Vector2(_rb2d.velocity.x, _recoilVelocityY);
+    //    _playerState.RecoilingY = true;
+    //    _rb2d.velocity = new Vector2(_rb2d.velocity.x, 0f);
+    //    _rb2d.velocity = new Vector2(_rb2d.velocity.x, _recoilVelocityY);
 
-        while(timer < _recoilTimeY)
-        {
-            timer += Time.deltaTime;
+    //    while(timer < _recoilTimeY)
+    //    {
+    //        timer += Time.deltaTime;
 
-            yield return null;
-        }
+    //        yield return null;
+    //    }
 
-        _playerState.RecoilingY = false;
-    }
+    //    _playerState.RecoilingY = false;
+    //}
 }

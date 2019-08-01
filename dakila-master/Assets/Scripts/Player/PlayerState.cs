@@ -9,6 +9,7 @@ public class PlayerState : MonoBehaviour
     public bool Walking { get; set; }
     public bool Jumping { get; set; }
     public bool DoubleJumping { get; set; }
+    public bool Falling { get; set; }
     public bool WallSlide { get; set; }
     public bool WallJumping { get; set; }
     public bool RecoilingX { get; set; }

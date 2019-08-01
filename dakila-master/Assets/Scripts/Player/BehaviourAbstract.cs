@@ -5,14 +5,17 @@ using System.Collections.Generic;
 
 public abstract class BehaviourAbstract : MonoBehaviour
 {
+    protected PlayerState
+        _playerState;
+
+    protected PlayerAttributes
+        _playerAttributes;
+
     protected InputState
         _inputState;
 
     protected CollisionState
         _collisionState;
-
-    protected PlayerState
-        _playerState;
 
     protected Rigidbody2D
         _rb2d;
@@ -22,11 +25,12 @@ public abstract class BehaviourAbstract : MonoBehaviour
 
     private void Awake()
     {
+        _playerState = GetComponent<PlayerState>();
+        _playerAttributes = GetComponent<PlayerAttributes>();
         _inputState = GetComponent<InputState>();
         _collisionState = GetComponent<CollisionState>();
-        _playerState = GetComponent<PlayerState>();
-        _rb2d = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _rb2d = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Start() { }
